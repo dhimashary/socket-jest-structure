@@ -1,10 +1,10 @@
 
-const io = require('socket.io-client')
+const io = require('socket.io-client');
 const server = require('../socketConfig');
 
 describe('Suite of unit tests', function () {
   //ngejalain servernya
-  server.attach(3010)
+  server.attach(3010);
   // let sender;
   // let receiver;
   let socket;
@@ -23,7 +23,7 @@ describe('Suite of unit tests', function () {
     });
     socket.on('disconnect', function () {
       console.log('disconnected...');
-    })
+    });
   });
 
   afterEach(function (done) {
@@ -38,53 +38,39 @@ describe('Suite of unit tests', function () {
     done();
 
   });
-  afterAll(function (done) {
-    server.detach()
-  })
 
   describe('Chat tests', function () {
     test('Sending message to the chat', (done) => {
       const data = {
         roomName: 'Teknologi Informasi',
         sender: 'Budi',
-        message: 'test message'
-      }
+        message: 'test message',
+        name: 'Irham'
+      };
 
-      socket.emit('send-message', data)
+      socket.emit('send-message', data);
 
       socket.on('room-detail', dataRes => {
-        expect(dataRes).toBeInstanceOf(Object)
-        expect(dataRes).toHaveProperty('name')
-        expect(dataRes).toHaveProperty('admin')
-        expect(dataRes).toHaveProperty('users')
-        expect(dataRes).toHaveProperty('messages')
-        expect(dataRes.messages).not.toHaveLength(0);
-        expect(dataRes.messages).toBeInstanceOf(Array)
-        expect(dataRes.messages[0]).toBeInstanceOf(Object)
-        expect(dataRes.messages[0]).toEqual(
-          expect.objectContaining({
-            sender: data.sender,
-            message: data.message
-          })
-        )
-        done()
-      })
-    })
+        expect(dataRes).toBeInstanceOf(Object);
+        expect(dataRes).toHaveProperty('name');
+        done();
+      });
+    });
 
     test('Show typing message', (done) => {
       let payload = {
         room: 'Teknologi Informasi',
         name: 'Budi'
-      }
-      socket.emit('typing-start', payload)
+      };
+      socket.emit('typing-start', payload);
 
       socket.on('typing-start', data => {
-        expect(data).toBe(payload.name)
-        done()
-      })
-    })
+        expect(data.name).toBe(payload.name);
+        done();
+      });
+    });
 
-  })
+  });
 
-})
+});
 
