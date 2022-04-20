@@ -28,10 +28,8 @@ describe('Suite of unit tests', function () {
 
   afterAll(function (done) {
     // Cleanup
-    socket.close(() => {
-      done();
-    });
-
+    socket.close();
+    done();
   });
 
   describe('Chat tests', function () {
