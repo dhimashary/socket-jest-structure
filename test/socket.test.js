@@ -9,7 +9,7 @@ describe('Suite of unit tests', function () {
   // let receiver;
   let socket;
 
-  beforeEach(function (done) {
+  beforeAll(function (done) {
     // Setup
     socket = io.connect('http://localhost:3010', {
       'reconnection delay': 0
@@ -26,16 +26,11 @@ describe('Suite of unit tests', function () {
     });
   });
 
-  afterEach(function (done) {
+  afterAll(function (done) {
     // Cleanup
-    if (socket.connected) {
-      console.log('disconnecting...');
-      socket.disconnect();
-    } else {
-      // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
-      console.log('no connection to break...');
-    }
-    done();
+    socket.close(() => {
+      done();
+    });
 
   });
 
